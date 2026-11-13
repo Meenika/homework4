@@ -1,11 +1,9 @@
 package maps
 
-
 import (
 	"slices"
 	"sort"
 )
-
 
 type User struct {
 	ID     int
@@ -23,7 +21,7 @@ type Product struct {
 
 func CountWords(words []string) map[string]int {
 	wordsCopy := make(map[string]int, len(words))
-	for _, word := range words{
+	for _, word := range words {
 		wordsCopy[word]++
 	}
 
@@ -33,24 +31,22 @@ func CountWords(words []string) map[string]int {
 func GetOrDefault(values map[string]int, key string, fallback int) int {
 	// TODO: вернуть значение существующего ключа или fallback, если ключ отсутствует.
 	// Нулевое значение по существующему ключу должно возвращаться как обычное значение.
-	for k, value := range values {
-		if k == key {
-			return value
-		}
+	value, ok := values[key]
+	if !ok {
+		return fallback
 	}
-	return fallback
+	return value
 }
 
 func DeleteAndReport(values map[string]int, key string) bool {
-	for k, _ := range values {
-		if k == key {
-			delete(values, key)
-			return true
-		}
+	_, ok := values[key]
+	if !ok {
+		return false
 	}
+	delete(values, key)
+	return true
 	// TODO: удалить ключ и сообщить, существовал ли он до вызова.
 	// Для отсутствующего ключа, пустой и nil map вернуть false без panic.
-	return false
 }
 
 func MergeCounters(left, right map[string]int) map[string]int {
@@ -92,11 +88,11 @@ func MaxKeyByValue(values map[string]int) (string, bool) {
 		return "", false
 	}
 	for k, v := range values {
-	    if !found || v > maxNum || (v == maxNum && k < saveKey) {
-        maxNum = v
-        saveKey = k
-        found = true
-    }
+		if !found || v > maxNum || (v == maxNum && k < saveKey) {
+			maxNum = v
+			saveKey = k
+			found = true
+		}
 	}
 	// TODO: найти ключ с максимальным значением.
 	// Для пустого входа вернуть "", false; при равенстве выбрать меньший ключ по алфавиту.
@@ -127,11 +123,11 @@ func GroupActiveUsersByCity(users []User) map[string][]User {
 
 func CountTags(users []User) map[string]int {
 	countTags := make(map[string]int)
-    for _, user := range users {
-        for _, tag := range user.Tags {
-            countTags[tag]++
-        }
-    }
+	for _, user := range users {
+		for _, tag := range user.Tags {
+			countTags[tag]++
+		}
+	}
 
 	// TODO: посчитать все появления тегов у всех пользователей.
 	// Повторяющийся тег у одного пользователя также считается отдельным появлением.
@@ -171,7 +167,7 @@ func Restock(inventory map[string]*Product, sku string, count int) bool {
 		return false
 	}
 	product, ok := inventory[sku]
-	if !ok || product == nil{
+	if !ok || product == nil {
 		return false
 	}
 	product.Quantity += count
@@ -181,37 +177,37 @@ func Restock(inventory map[string]*Product, sku string, count int) bool {
 }
 
 func LowStockSKUs(inventory map[string]Product, limit int) []string {
-    result := make([]string, 0)
-    for sku, product := range inventory {
-        if product.Quantity <= limit {
-            result = append(result, sku)
-        }
-    }
-    sort.Strings(result)
+	result := make([]string, 0)
+	for sku, product := range inventory {
+		if product.Quantity <= limit {
+			result = append(result, sku)
+		}
+	}
+	sort.Strings(result)
 	return result
 }
 
 func InventoryValue(inventory map[string]Product) int {
-    total := 0
-    for _, product := range inventory {
-        total += product.Quantity * product.Price
-    }
-    return total
+	total := 0
+	for _, product := range inventory {
+		total += product.Quantity * product.Price
+	}
+	return total
 }
 
 func ApplyPriceUpdates(inventory map[string]Product, updates map[string]int) int {
-    count := 0
-    for sku, newPrice := range updates {
-        if newPrice <= 0 {
-            continue
-        }
-        product, ok := inventory[sku]
-        if !ok {
-            continue
-        }
-        product.Price = newPrice
-        inventory[sku] = product
-        count++
-    }
-    return count
+	count := 0
+	for sku, newPrice := range updates {
+		if newPrice <= 0 {
+			continue
+		}
+		product, ok := inventory[sku]
+		if !ok {
+			continue
+		}
+		product.Price = newPrice
+		inventory[sku] = product
+		count++
+	}
+	return count
 }

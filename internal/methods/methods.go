@@ -99,7 +99,7 @@ func (a *Account) TransferTo(destination *Account, amount int) error {
 	if destination == nil {
 		return ErrNilDestination
 	}
-	if !a.Active || !destination.Active{
+	if !a.Active || !destination.Active {
 		return ErrInactive
 	}
 	if amount <= 0 {
@@ -138,9 +138,6 @@ func (a *Account) Deactivate() error {
 		a.Active = false
 	}
 	// TODO: сделать счёт активным.
-	// Для nil receiver вернуть ErrNilAccount.
-	return nil
-	// TODO: сделать счёт неактивным.
 	// Для nil receiver вернуть ErrNilAccount.
 	return nil
 }
@@ -205,16 +202,16 @@ func (c *Cart) Add(sku string, count int) error {
 		return ErrInvalidAmount
 	}
 	total := 0
-    for _, amount := range c.Items {
-        total += amount
-    }
-    if total + count > c.MaxItems {
-        return ErrCartLimit
-    }
-    if c.Items == nil {
-        c.Items = make(map[string]int)
-    }
-    c.Items[sku] += count
+	for _, amount := range c.Items {
+		total += amount
+	}
+	if total+count > c.MaxItems {
+		return ErrCartLimit
+	}
+	if c.Items == nil {
+		c.Items = make(map[string]int)
+	}
+	c.Items[sku] += count
 	return nil
 }
 

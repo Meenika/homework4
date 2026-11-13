@@ -1,8 +1,8 @@
 package common
 
 import (
-	"github.com/rinatkh/homework_go_4/internal/methods"
 	"fmt"
+	"github.com/rinatkh/homework_go_4/internal/methods"
 )
 
 type Operation struct {
@@ -26,8 +26,7 @@ func ApplyOperations(accounts map[int]*methods.Account, operations []Operation) 
 	for _, operation := range operations {
 		account, ok := accounts[operation.AccountID]
 		if !ok || account == nil {
-			result.Errors = append(result.Errors, fmt.Sprintf("account %d: not found", operation.AccountID),
-			)
+			result.Errors = append(result.Errors, fmt.Sprintf("account %d: not found", operation.AccountID))
 			continue
 		}
 		var err error
@@ -37,13 +36,11 @@ func ApplyOperations(accounts map[int]*methods.Account, operations []Operation) 
 		case "withdraw":
 			err = account.Withdraw(operation.Amount)
 		default:
-			result.Errors = append(result.Errors, fmt.Sprintf("account %d: unknown operation %q", operation.AccountID, operation.Kind),
-			)
+			result.Errors = append(result.Errors, fmt.Sprintf("account %d: unknown operation %q", operation.AccountID, operation.Kind))
 			continue
 		}
 		if err != nil {
-			result.Errors = append(result.Errors, fmt.Sprintf("account %d: %s", operation.AccountID, err.Error()),
-			)
+			result.Errors = append(result.Errors, fmt.Sprintf("account %d: %s", operation.AccountID, err.Error()))
 		}
 	}
 	for id, account := range accounts {

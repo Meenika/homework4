@@ -1,8 +1,8 @@
 package structs
 
 import (
-	"unsafe"
 	"fmt"
+	"unsafe"
 )
 
 type User struct {
@@ -176,5 +176,3 @@ func LayoutSizes() (bad, good, saved uintptr) {
 	saved = bad - good
 	return bad, good, saved
 }
-
-
